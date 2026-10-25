@@ -1,0 +1,2 @@
+# Копирайте като .dev.vars за локална разработка (файлът .dev.vars не се качва в Git).
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx

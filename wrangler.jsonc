@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bulcons-landing",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  "observability": { "enabled": true },
+  // Непотайни настройки. Тайният ключ (RESEND_API_KEY) се задава отделно:
+  //   pnpm wrangler secret put RESEND_API_KEY
+  "vars": {
+    "INQUIRY_TO": "office@bulcons.com",
+    // Адресът трябва да е от домейн, потвърден в Resend (Domains).
+    "INQUIRY_FROM": "Булконс сайт <zapitvane@bulcons.com>"
+  }
+}
