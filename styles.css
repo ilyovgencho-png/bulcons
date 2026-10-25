@@ -1,0 +1,158 @@
+@import 'tailwindcss' source('../');
+
+/* Self-hosted variable fonts – all three include Cyrillic. */
+@import '@fontsource-variable/literata/wght.css';
+@import '@fontsource-variable/literata/wght-italic.css';
+@import '@fontsource-variable/golos-text/wght.css';
+@import '@fontsource-variable/jetbrains-mono/wght.css';
+
+@theme {
+  --color-paper: #f2ede3;
+  --color-paper-deep: #e8e0d1;
+  --color-ink: #1c2530;
+  --color-ink-soft: #2a3542;
+  --color-graphite: #5b6370;
+  --color-signal: #c9521f;
+  --color-signal-deep: #a8431a;
+  --color-signal-dark: #8f3815;
+  --color-pine: #c7a26b;
+
+  --font-display: 'Literata Variable', Georgia, serif;
+  --font-sans: 'Golos Text Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-paper);
+}
+
+/* Fixed paper grain, kept off scrolling containers for performance. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.3;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.11 0 0 0 0 0.14 0 0 0 0 0.19 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.blueprint {
+  background-color: var(--color-ink);
+  background-image:
+    linear-gradient(rgb(242 237 227 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(242 237 227 / 0.05) 1px, transparent 1px),
+    linear-gradient(rgb(242 237 227 / 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(242 237 227 / 0.025) 1px, transparent 1px);
+  background-size:
+    96px 96px,
+    96px 96px,
+    24px 24px,
+    24px 24px;
+}
+
+@layer components {
+.btn {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3.5 font-semibold text-[0.95rem] tracking-tight transition-[transform,background-color,box-shadow] duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 disabled:cursor-wait disabled:opacity-70;
+    border-radius: 2px;
+  }
+  
+  .btn:active {
+    transform: translateY(1px);
+  }
+  
+  .btn-signal {
+    @apply bg-signal-deep text-paper hover:bg-signal-dark focus-visible:outline-signal-deep;
+    box-shadow: 4px 4px 0 var(--color-ink);
+  }
+  
+  .btn-signal:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0 var(--color-ink);
+  }
+  
+  .btn-ink {
+    @apply bg-ink text-paper hover:bg-ink-soft focus-visible:outline-ink;
+    box-shadow: 4px 4px 0 var(--color-paper);
+  }
+  
+  .btn-ghost {
+    @apply border border-ink/25 text-ink hover:border-ink hover:bg-ink/5 focus-visible:outline-ink;
+  }
+  
+  .eyebrow {
+    @apply font-mono text-[0.7rem] uppercase tracking-[0.22em];
+  }
+}
+
+/* Page-load choreography */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Scroll reveals, toggled by the page's IntersectionObserver. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .rise {
+    animation: none;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.form-input {
+  @apply w-full border border-ink/25 bg-paper px-4 py-3 text-ink placeholder:text-ink/40 focus-visible:border-signal focus-visible:outline-none;
+  border-radius: 2px;
+}
+
+.form-check {
+  accent-color: var(--color-signal-deep);
+}
+
+/* FAQ accordion: the plus rotates to an x when an answer opens. */
+.faq[open] .faq-icon {
+  transform: rotate(45deg);
+}
